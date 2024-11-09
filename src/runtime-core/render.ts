@@ -1,6 +1,6 @@
-import { isObject } from "../shared";
 import { ShapeFlags } from "../shared/ShapeFlags";
 import { createComponentInstance, setupComponent } from "./component";
+import { Fragment, Text } from "./vnode";
 
 export function render(vnode, container) {
     // patch
@@ -12,13 +12,38 @@ function patch(vnode, container){
   // ShapeFlags
   // vnode -> flag
   // element
-  const { shapeFlag } = vnode
-   if(shapeFlag & ShapeFlags.ELEMENT){
-     processElement(vnode, container)
-     // STATEFYL_COMPONENT
-   } else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT){
-     processComponent(vnode, container)
-   }
+  const { type, shapeFlag } = vnode
+
+    // Fragment -> 只渲染 children
+    switch (type) {
+      case Fragment:
+        processFragment(vnode, container)
+        break;
+    
+      case Text:
+        processText(vnode, container)
+        break;
+    
+      default:
+        if(shapeFlag & ShapeFlags.ELEMENT){
+          processElement(vnode, container)
+          // STATEFYL_COMPONENT
+        } else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT){
+          processComponent(vnode, container)
+        }
+        break;
+    }
+}
+
+function processText(vnode: any, container: any){
+  const { children } = vnode
+  const textNode = (vnode.el =document.createTextNode(children))
+  container.append(textNode)
+}
+
+function processFragment(vnode: any, container: any){
+  // Implement
+  mountChildren(vnode, container)
 }
 
 function processElement(vnode: any, container: any) {
@@ -55,17 +80,22 @@ function mountElement(vnode: any, container: any) {
     } else {
       el.setAttribute(key, val)
     }
-    
   }
-
   container.append(el)
 }
 
-function mountChildren(vnode, container){
+function  mountChildren(vnode, container){
   vnode.children.forEach((v) => {
     patch(v, container)
   })
 }
+// function mountChildren(vnode, container) {
+//   vnode.children
+//       .filter(child => child) // 过滤掉 undefined 元素
+//       .forEach((v) => {
+//           patch(v, container);
+//       });
+// }
 
 function processComponent(vnode: any, container: any) {
   mountComponent(vnode, container);

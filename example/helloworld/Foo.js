@@ -6,9 +6,8 @@ export const Foo = {
   },
   render(){
     const foo = h("p", {}, "foo")
-
     // Foo .vnode children
-    console.log(this.$slots);
+    // console.log(this.$slots);
     // children -> vnode
     // renderSlots
     // 具名插槽

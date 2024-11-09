@@ -10,8 +10,8 @@ export function createComponentInstance(vnode){
     type: vnode.type,
     setupState: {},
     props: {},
-    slots:{},
-    emit:() => {}
+    slots: {},
+    emit: () => {}
   }
 
   component.emit = emit.bind(null, component) as any;
@@ -33,6 +33,7 @@ function setupStatefulComponent(instance: any) {
   instance.proxy = new Proxy({_:instance}, PublicInstanceProxyHandlers)
 
   const { setup } = Component
+
   if(setup){
     // function Object
     const setupResult = setup(shallowReadonly(instance.props), {

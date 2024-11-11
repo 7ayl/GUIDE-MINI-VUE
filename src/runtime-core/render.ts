@@ -6,9 +6,9 @@ import { Fragment, Text } from "./vnode";
 export function createRender(options){
 
 const { 
-  createElement,
-  patchProp,
-  insert
+  createElement: hostCreateElement,
+  patchProp: hostPatchProp,
+  insert:hostInsert
 } = options
 
 function render(vnode, container) {
@@ -21,7 +21,7 @@ function patch(vnode, container, parentComponent){
   // ShapeFlags
   // vnode -> flag
   // element
-  const { type, shapeFlag } = vnode
+  const { type, shapeFlag } = vnode 
 
     // Fragment -> 只渲染 children
     switch (type) {
@@ -62,7 +62,7 @@ function processElement(vnode: any, container: any, parentComponent) {
 
 function mountElement(vnode: any, container: any, parentComponent) {
   // vnode -> element -> div
-  const el = (vnode.el = createElement(vnode.type))
+  const el = (vnode.el = hostCreateElement(vnode.type))
  
   // string array
   const { children, shapeFlag } = vnode
@@ -78,10 +78,10 @@ function mountElement(vnode: any, container: any, parentComponent) {
   const { props } = vnode
   for(const key in props){
     const val = props[key]
-    patchProp(el, key, val)
+    hostPatchProp(el, key, val)
   }
   // container.append(el)
-  insert(el, container)
+  hostInsert(el, container)
 }
 
 function mountChildren(vnode, container, parentComponent){

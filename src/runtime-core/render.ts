@@ -1,8 +1,17 @@
 import { ShapeFlags } from "../shared/ShapeFlags";
 import { createComponentInstance, setupComponent } from "./component";
+import { createAppAPI } from "./createApp";
 import { Fragment, Text } from "./vnode";
 
-export function render(vnode, container) {
+export function createRender(options){
+
+const { 
+  createElement,
+  patchProp,
+  insert
+} = options
+
+function render(vnode, container) {
     // patch
     // 
     patch(vnode, container, null)
@@ -53,7 +62,7 @@ function processElement(vnode: any, container: any, parentComponent) {
 
 function mountElement(vnode: any, container: any, parentComponent) {
   // vnode -> element -> div
-  const el = (vnode.el = document.createElement(vnode.type))
+  const el = (vnode.el = createElement(vnode.type))
  
   // string array
   const { children, shapeFlag } = vnode
@@ -69,22 +78,13 @@ function mountElement(vnode: any, container: any, parentComponent) {
   const { props } = vnode
   for(const key in props){
     const val = props[key]
-    console.log(key);
-    // 具体的click -> 通用
-    // on + Event name
-    // onMousedown
-    const isOn = (key:string) => /^on[A-Z]/.test(key)
-    if(isOn(key)){
-      const event = key.slice(2).toLowerCase()
-      el.addEventListener(event,val)
-    } else {
-      el.setAttribute(key, val)
-    }
+    patchProp(el, key, val)
   }
-  container.append(el)
+  // container.append(el)
+  insert(el, container)
 }
 
-function  mountChildren(vnode, container, parentComponent){
+function mountChildren(vnode, container, parentComponent){
   vnode.children.forEach((v) => {
     patch(v, container, parentComponent)
   })
@@ -108,4 +108,7 @@ function setupRenderEffect(instance: any, initialVnode, container) {
   // element -> mount
   initialVnode.el = subTree.el
 }
-
+return {
+  createApp:createAppAPI(render)
+}
+}

@@ -159,6 +159,48 @@ function patchKeyedChildren(c1, c2, container, parentComponent, parentAnchor){
       hostRemove(c1[i].el)
       i++
     }
+  } else {
+    // 中间对比
+    let s1 = i
+    let s2 = i
+
+    const toBePatched = e2 - s2 + 1
+    let patched = 0
+    const keyToNewIndexMap = new Map()
+
+    for (let i = s2; i <= e2; i++) {
+      const nextchild = c2[i]
+      keyToNewIndexMap.set(nextchild.key, i)
+    }
+
+    for (let i = s1; i <= e1; i++) {
+      const prevChild = c1[i]
+
+      if(patched >= toBePatched){
+        hostRemove(prevChild.el)
+        continue;
+      }
+
+      let newIndex
+
+      if(prevChild.key !== null){
+        newIndex = keyToNewIndexMap.get(prevChild.key)
+      }else{
+        for (let j = s2; j < e2; j++) {
+          if(isSameVnodeType(prevChild, c2[j])){
+            newIndex = j;
+            break;
+          }
+        }
+      }
+
+      if(newIndex === undefined){
+        hostRemove(prevChild.el)
+      }else{
+        patch(prevChild, c2[newIndex], container, parentComponent, null)
+        patched++;
+      }
+    }
   }
 }
 

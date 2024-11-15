@@ -3,6 +3,7 @@ import { h } from "../../lib/guide-mini-vue.esm.js"
 import ArrayToText from './ArrayToText.js'
 import TextToText from "./TextToText.js"
 import TextToArray from "./TextToArray.js"
+import ArrayToArray from "./ArrayToArray.js"
 
 export default {
   name: "App",

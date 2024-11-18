@@ -1,3 +1,4 @@
+import { template } from '@babel/core';
 import { h, provide, inject } from '../../lib/guide-mini-vue.esm.js'
 
 const Provider = {
@@ -42,6 +43,9 @@ const Consumer = {
       baz
     }
   },
+
+  template: `<div>Consumer: xxx</div>`,
+
   render(){
     return h("div", {}, `Consumer: - ${this.foo} - ${this.bar} - ${this.baz}`)
   }

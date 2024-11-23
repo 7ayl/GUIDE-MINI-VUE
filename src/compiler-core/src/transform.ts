@@ -1,5 +1,5 @@
 import { NodeTypes } from "./ast"
-import { TO_DISPLAY_STRING } from "./runtimehelpers"
+import { TO_DISPLAY_STRING } from "./runtimeHelpers"
 
 export function transform(root, options = {}){
   const context = createTransformContext(root, options)

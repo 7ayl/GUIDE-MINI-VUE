@@ -1,4 +1,4 @@
-import { CREATE_ELEMENT_VNODE } from "./runtimehelpers"
+import { CREATE_ELEMENT_VNODE } from "./runtimeHelpers"
 
 export const enum NodeTypes{
   INTERPOLATION,

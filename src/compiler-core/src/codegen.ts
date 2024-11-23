@@ -1,6 +1,6 @@
 import { isString } from "../../shared"
 import { NodeTypes } from "./ast"
-import { CREATE_ELEMENT_VNODE, helperMapName, TO_DISPLAY_STRING } from "./runtimehelpers"
+import { CREATE_ELEMENT_VNODE, helperMapName, TO_DISPLAY_STRING } from "./runtimeHelpers"
 
 export function generate(ast){
   const context = createCodegenContext()
